@@ -1,7 +1,7 @@
 site:
   title: Yoga Book Linux
   url: https://yoga-book.github.io
-  start_page: yoga-book::index.adoc
+  start_page: ROOT::index.adoc
 
 content:
   sources:
