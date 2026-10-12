@@ -1,0 +1,25 @@
+= Contributing
+:description: How to contribute reproducible fixes and hardware reports to Yoga Book Linux.
+
+Contributions and reproducible hardware reports are welcome.
+
+== Find the owning project
+
+Start with xref:projects.adoc[the project map], then search that repository's existing issues and read its local contribution guidance. Driver, package, and application defects should be reported to the component that owns them.
+
+For system-wide behavior or help collecting evidence, begin with https://github.com/Yoga-Book/Yoga-Book-Validator[Yoga Book Validator].
+
+== Make the result reproducible
+
+A useful report or change records:
+
+* the exact hardware model and software revisions;
+* the smallest reliable reproduction procedure;
+* the logs or test output that support the conclusion;
+* the distinction between build, VM, and physical-device evidence; and
+* any recovery steps needed when testing the change.
+
+== Improve this site
+
+Organization-level navigation and shared guidance live in the https://github.com/Yoga-Book/Yoga-Book.github.io[site repository]. Project-specific technical documentation should remain with the project that owns it and can later be included here as an Antora component.
+

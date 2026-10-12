@@ -1,0 +1,7 @@
+[CAUTION]
+====
+This is a community package repository hosted outside the Yoga Book GitHub organization. Enabling it grants its signing key authority to install and update system packages. Back up important data, verify the key and repository identity, and keep a known-good kernel or boot option.
+
+Repository availability is not physical-device acceptance. See xref:support-status.adoc[Support and evidence].
+====
+

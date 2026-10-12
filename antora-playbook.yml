@@ -1,0 +1,21 @@
+site:
+  title: Yoga Book Linux
+  url: https://yoga-book.github.io
+  start_page: yoga-book::index.adoc
+
+content:
+  sources:
+    - url: .
+      branches: HEAD
+      worktrees: true
+      edit_url: 'https://github.com/Yoga-Book/Yoga-Book.github.io/edit/{refname}/{path}'
+
+ui:
+  bundle:
+    url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/HEAD/raw/build/ui-bundle.zip?job=bundle-stable
+    snapshot: true
+  supplemental_files: ./supplemental-ui
+
+output:
+  dir: ./build/site
+

@@ -1,0 +1,130 @@
+:root {
+  --yb-ink: #17191d;
+  --yb-muted: #5f6670;
+  --yb-paper: #f7f6f2;
+  --yb-panel: #ffffff;
+  --yb-accent: #d84a2f;
+  --yb-accent-dark: #a92d19;
+  --yb-line: #d9d7d0;
+}
+
+body {
+  color: var(--yb-ink);
+  background: var(--yb-paper);
+}
+
+.navbar {
+  background: #121418;
+}
+
+.navbar-brand .navbar-item {
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+
+.doc.home > h1:first-child {
+  display: none;
+}
+
+.doc .hero {
+  margin: 0 0 2rem;
+  padding: clamp(2rem, 6vw, 5rem);
+  border-radius: .4rem;
+  color: #fff;
+  background:
+    linear-gradient(120deg, rgba(216, 74, 47, .92), rgba(23, 25, 29, .94)),
+    repeating-linear-gradient(45deg, transparent 0 18px, rgba(255, 255, 255, .06) 18px 19px);
+}
+
+.doc .hero h2 {
+  max-width: 13ch;
+  margin: .2rem 0 .75rem;
+  border: 0;
+  color: #fff;
+  font-size: clamp(2.4rem, 6vw, 5.2rem);
+  line-height: .98;
+  letter-spacing: -.045em;
+}
+
+.doc .hero .paragraph {
+  max-width: 48rem;
+  font-size: 1.15rem;
+}
+
+.doc .hero .eyebrow {
+  font-size: .75rem;
+  font-weight: 800;
+  letter-spacing: .18em;
+}
+
+.doc a.button {
+  display: inline-block;
+  margin: .75rem .6rem 0 0;
+  padding: .68rem 1rem;
+  border: 1px solid rgba(255, 255, 255, .65);
+  border-radius: .25rem;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.doc a.button.primary {
+  border-color: #fff;
+  color: var(--yb-accent-dark);
+  background: #fff;
+}
+
+.doc .notice {
+  margin: 2rem 0 3rem;
+}
+
+.doc .card-grid > .content {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.doc .card {
+  height: 100%;
+  padding: 1.25rem;
+  border: 1px solid var(--yb-line);
+  border-top: 4px solid var(--yb-accent);
+  border-radius: .25rem;
+  background: var(--yb-panel);
+  box-shadow: 0 .4rem 1.2rem rgba(23, 25, 29, .06);
+}
+
+.doc .card-label {
+  color: var(--yb-accent-dark);
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+
+.doc .card-title {
+  display: block;
+  margin: .5rem 0 .7rem;
+  color: var(--yb-ink);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.doc table.principles {
+  background: var(--yb-panel);
+}
+
+.doc table.principles th {
+  color: var(--yb-accent-dark);
+}
+
+@media screen and (max-width: 768px) {
+  .doc .card-grid > .content {
+    grid-template-columns: 1fr;
+  }
+
+  .doc .hero {
+    padding: 2rem 1.4rem;
+  }
+}
+

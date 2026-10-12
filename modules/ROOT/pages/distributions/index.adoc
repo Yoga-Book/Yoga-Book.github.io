@@ -1,0 +1,39 @@
+= Distributions
+:description: Community package repositories for running Linux on the original Lenovo Yoga Book.
+
+Community-maintained package repositories make the Yoga Book kernel and userspace components available for several distributions.
+
+[cols="1,2,2",options="header"]
+|===
+|Distribution |Repository coverage |Guide
+
+|Arch Linux
+|Kernel, firmware, hardware services, applications, and validation packages
+|xref:distributions/arch.adoc[Install on Arch Linux]
+
+|Debian
+|Repositories for Sid, Testing, Forky, and Trixie
+|xref:distributions/debian.adoc[Install on Debian]
+
+|Ubuntu
+|Repositories published for named Ubuntu releases
+|xref:distributions/ubuntu.adoc[Install on Ubuntu]
+
+|Alpine Linux
+|Packages built for Alpine Edge with OpenRC services
+|xref:distributions/alpine.adoc[Install on Alpine Linux]
+|===
+
+[IMPORTANT]
+====
+These package repositories are operated at `packages.ulbricht.casa` or `gitlab.imanuel.dev`, outside the Yoga Book GitHub organization. Enabling one grants that repository's signing key authority to install and update packages on your system.
+
+The instructions were incorporated from Imanuel Ulbricht's distribution pages and reviewed on **2026-10-12**. Check the linked original guide for newer repository URLs or supported releases before running commands.
+====
+
+== Credits and provenance
+
+Yauhen Kharuzhy created the original Yoga Book packages. Since September 2026, https://github.com/MaurizioCasciano[Maurizio Casciano] and https://github.com/DerKnerd[Imanuel Ulbricht] have collaborated on modernizing the package set.
+
+The distribution repositories package software developed across the xref:projects.adoc[Yoga Book projects]. A package being available does not by itself establish physical-device acceptance; consult xref:support-status.adoc[Support and evidence].
+

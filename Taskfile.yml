@@ -1,0 +1,29 @@
+version: '3'
+
+tasks:
+  install:
+    desc: Install the pinned site dependencies
+    cmds:
+      - npm ci
+
+  build:
+    desc: Build the site from the local checkout
+    cmds:
+      - npm run build
+
+  build:fetch:
+    desc: Refresh remote Antora sources and build the site
+    cmds:
+      - npm run build:fetch
+
+  preview:
+    desc: Preview the built site at http://localhost:8080
+    deps: [build]
+    cmds:
+      - python3 -m http.server 8080 --directory build/site
+
+  clean:
+    desc: Remove generated site output
+    cmds:
+      - rm -rf build
+

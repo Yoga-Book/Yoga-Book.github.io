@@ -1,0 +1,40 @@
+= Support and evidence
+:description: How Yoga Book Linux documents compatibility and validation evidence.
+
+Hardware enablement is only useful when a claim says exactly what was tested. Yoga Book projects keep these evidence levels distinct.
+
+[cols="1,3",options="header"]
+|===
+|Evidence |What it establishes
+
+|Source review
+|The implementation and configuration appear consistent with the intended design.
+
+|Build or automated test
+|The source compiles or a repeatable software check passes in its documented environment.
+
+|Virtual-machine validation
+|Installation or operating-system behavior works in a VM; device-specific hardware remains unproven.
+
+|Physical acceptance
+|The stated behavior was exercised on the named Yoga Book model with the recorded artifact and environment.
+|===
+
+These levels complement one another. None should be silently promoted into a stronger claim.
+
+== Current integration target
+
+The **YB1-X91L** is the primary integration and physical-acceptance target. Support for other original Yoga Book variants is repository-specific; consult the relevant project before reusing packages or installation media.
+
+== Reporting a problem
+
+Include:
+
+* the exact model and firmware version;
+* the distribution and running kernel version;
+* reproduction steps and expected versus observed behavior;
+* relevant logs or a Yoga Book Validator report; and
+* whether the result came from automation, a virtual machine, or the physical tablet.
+
+Do not publish credentials, serial numbers, private firmware, or other sensitive data.
+

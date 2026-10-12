@@ -1,0 +1,32 @@
+# Generated site and dependencies
+/build/
+/node_modules/
+/.cache/
+
+# Local agent, credential, and environment state
+/.agents/
+/.codex/
+/.aws
+/.aws/
+.env
+.env.*
+!.env.example
+
+# Tool and editor state
+/.idea/
+/.vscode/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Operating-system metadata
+.DS_Store
+Thumbs.db
+

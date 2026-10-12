@@ -1,0 +1,18 @@
+{
+  "name": "yoga-book-github-io",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Official documentation site for Yoga Book Linux",
+  "scripts": {
+    "build": "antora --clean --log-failure-level=warn antora-playbook.yml",
+    "build:fetch": "antora --clean --fetch --log-failure-level=warn antora-playbook.yml"
+  },
+  "devDependencies": {
+    "@antora/cli": "3.2",
+    "@antora/site-generator": "3.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
+

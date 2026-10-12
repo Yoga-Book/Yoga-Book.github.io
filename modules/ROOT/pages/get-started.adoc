@@ -1,0 +1,30 @@
+= Get started
+:description: Choose the right entry point for installing, testing, or developing Yoga Book Linux.
+
+The Yoga Book Linux organization coordinates the device-specific pieces needed to run Linux on the original Intel-based Lenovo Yoga Book. Start with the path that matches your goal.
+
+== Install Linux
+
+The https://github.com/Yoga-Book/Ubuntu-Autoinstall[Ubuntu Autoinstall repository] is the system-integration entry point. Its documentation and releases describe the supported model, image contents, verification performed, and recovery expectations.
+
+Before writing an image or changing an existing installation:
+
+* confirm the exact Yoga Book model and firmware version;
+* back up important data;
+* keep a known-good boot or recovery option; and
+* read the release notes and repository-specific requirements in full.
+
+If Linux is already installed, community repositories provide Yoga Book packages for xref:distributions/index.adoc[Arch Linux, Debian, Ubuntu, and Alpine Linux].
+
+== Check an existing system
+
+Use https://github.com/Yoga-Book/Yoga-Book-Validator[Yoga Book Validator] to collect system facts and run automated checks. Treat its report as diagnostic evidence, not as a substitute for physical checks such as audio playback, pen input, rotation, cameras, or suspend and resume.
+
+== Develop or test a component
+
+Open the repository that owns the affected layer. Its README, contribution guidance, branches, and issue tracker are authoritative for that component.
+
+xref:projects.adoc[Browse the project map →]
+
+CAUTION: Do not install an artifact solely because it built successfully. Check the target model, version compatibility, provenance, and documented validation first.
+

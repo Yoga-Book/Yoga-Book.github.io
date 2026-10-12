@@ -1,0 +1,52 @@
+= Projects
+:description: Map of active Yoga Book Linux projects and their responsibilities.
+
+The organization separates platform, installation, validation, and userspace concerns so that ownership and evidence remain clear.
+
+[cols="1,2,2",options="header"]
+|===
+|Layer |Project |Scope
+
+|Platform
+|https://github.com/Yoga-Book/Yoga-Book-Linux-Kernel[Yoga Book Linux Kernel]
+|Kernel source and Yoga Book hardware enablement
+
+|Installation
+|https://github.com/Yoga-Book/Ubuntu-Autoinstall[Ubuntu Autoinstall]
+|Installer images and package integration
+
+|Validation
+|https://github.com/Yoga-Book/Yoga-Book-Validator[Yoga Book Validator]
+|Command-line and graphical system and hardware checks
+
+|Input
+|https://github.com/Yoga-Book/Halo-Keyboard[Halo Keyboard]
+|Halo keyboard, touchpad, haptics, and input quirks
+
+|Sensors
+|https://github.com/Yoga-Book/Yoga-Book-Sensors[Yoga Book Sensors]
+|Orientation, proximity, classification, and thermal policy
+
+|Location
+|https://github.com/Yoga-Book/Yoga-Book-GNSS[Yoga Book GNSS]
+|BCM4752 GNSS receiver integration and gpsd bridge
+
+|Camera
+|https://github.com/Yoga-Book/Yoga-Book-Camera[Yoga Book Camera]
+|Experimental front and rear camera userspace integration
+
+|Audio
+|https://github.com/Yoga-Book/Yoga-Book-ALSA-UCM-Config[Yoga Book ALSA UCM Config]
+|ALSA Use Case Manager configuration for the Yoga Book audio path
+
+|Firmware
+|https://github.com/Yoga-Book/Yoga-Book-Sound-Open-Firmware[Yoga Book Sound Open Firmware]
+|Sound Open Firmware integration for the Yoga Book
+|===
+
+Read-only upstream desktop mirrors and archived experiments may also appear in the https://github.com/orgs/Yoga-Book/repositories[complete repository list], but they are not recommended starting points for users.
+
+== Documentation roadmap
+
+This site begins as a curated organization-level guide. As project documentation adopts Antora's component structure, the playbook can aggregate those repositories into one searchable, version-aware site without moving ownership away from each project.
+

@@ -1,0 +1,84 @@
+= Linux on the original Lenovo Yoga Book
+:page-role: home
+:description: Community-led Linux enablement for the Intel-based Lenovo Yoga Book.
+
+[.hero]
+====
+[.eyebrow]#YOGA BOOK LINUX#
+
+== One device. Every layer.
+
+Community-led Linux enablement for the original Intel-based Lenovo Yoga Book:
+kernel, input, audio, sensors, cameras, location, installation, and validation.
+
+xref:get-started.adoc[Get started,role="button primary"]
+xref:projects.adoc[Explore projects,role="button"]
+====
+
+[.notice]
+IMPORTANT: This is active, device-specific development. A successful build or automated test is not proof that hardware works on the tablet. Project documentation distinguishes automated evidence from physical acceptance.
+
+== Choose your path
+
+[.card-grid]
+====
+[.card]
+--
+[.card-label]#01 · INSTALL#
+
+[.card-title]#Prepare an Ubuntu image#
+
+Use the documented ISO-remastering workflow as the system-integration entry point.
+
+https://github.com/Yoga-Book/Ubuntu-Autoinstall[Ubuntu Autoinstall →]
+--
+
+[.card]
+--
+[.card-label]#02 · DEVELOP#
+
+[.card-title]#Follow platform work#
+
+Explore the kernel branches and patches that provide the hardware-enablement foundation.
+
+https://github.com/Yoga-Book/Yoga-Book-Linux-Kernel[Linux kernel →]
+--
+
+[.card]
+--
+[.card-label]#03 · VERIFY#
+
+[.card-title]#Test the complete system#
+
+Audit an installation and record automated results separately from physical checks.
+
+https://github.com/Yoga-Book/Yoga-Book-Validator[Yoga Book Validator →]
+--
+====
+
+== Engineering principles
+
+[cols="1,1,1",options="header",stripes=none,role=principles]
+|===
+|Focused ownership
+|Verifiable results
+|Safe by default
+
+|Kernel, userspace, packaging, and validation concerns stay in explicitly scoped repositories.
+|Build results, VM checks, and physical-device acceptance are reported as different kinds of evidence.
+|Installation and diagnostic workflows favor explicit targets, recovery paths, and reproducible results.
+|===
+
+== Primary target
+
+The Lenovo Yoga Book **YB1-X91L** is the primary integration and acceptance target.
+Individual projects document any additional supported models and the evidence available for them.
+
+xref:support-status.adoc[Understand support claims and evidence →]
+
+== Distribution packages
+
+Community package repositories are available for xref:distributions/arch.adoc[Arch Linux], xref:distributions/debian.adoc[Debian], xref:distributions/ubuntu.adoc[Ubuntu], and xref:distributions/alpine.adoc[Alpine Linux]. These packages are hosted outside GitHub; review the provenance and support notice before enabling a repository.
+
+xref:distributions/index.adoc[Choose a distribution →]
+

@@ -1,0 +1,56 @@
+= Debian
+:description: Install the Yoga Book package set on Debian.
+
+This guide configures Imanuel Ulbricht's Debian package repository and installs the Yoga Book package set.
+
+Source guide:: https://debian.yogabook.ulbricht.casa/[debian.yogabook.ulbricht.casa]
+Last reviewed:: 2026-10-12
+
+include::partial$distribution-trust.adoc[]
+
+== Choose a Debian suite
+
+Set `suite` to one of the suites currently published by the repository:
+
+[cols="1,2",options="header"]
+|===
+|Value |Debian track
+|`sid` |Unstable
+|`testing` |Rolling Testing alias
+|`forky` |Forky
+|`trixie` |Trixie
+|===
+
+The suite must match the installed system. Do not mix Debian releases merely to obtain a package.
+
+== Add the repository
+
+The following example uses Trixie. Replace `trixie` in both the shell variable and repository line with the matching value from the table.
+
+[source,console]
+----
+suite=trixie
+sudo install -d -m 0755 /etc/apt/keyrings
+sudo curl --fail --show-error --location \
+  https://packages.ulbricht.casa/api/packages/linux-yogabook/debian/repository.key \
+  --output /etc/apt/keyrings/forgejo-linux-yogabook.asc
+echo "deb [signed-by=/etc/apt/keyrings/forgejo-linux-yogabook.asc] https://packages.ulbricht.casa/api/packages/linux-yogabook/debian ${suite} main" \
+  | sudo tee /etc/apt/sources.list.d/forgejo-linux-yogabook.list
+sudo apt update
+----
+
+Inspect the downloaded key and the packages APT proposes before accepting installation.
+
+== Install the package set
+
+[source,console]
+----
+sudo apt install linux-image-yogabook linux-headers-yogabook halo-keyboard alsa-ucm-conf-yogabook yogabook-sensors yogabook-gnss yogabook-camera yogabook-validator
+----
+
+Keep the distribution kernel installed as a recovery option until the Yoga Book kernel has passed the required physical checks.
+
+== Build sources
+
+The Debian package build scripts and pipelines are maintained in the https://gitlab.imanuel.dev/packages/yogabook/building/apt-build[apt-build project].
+

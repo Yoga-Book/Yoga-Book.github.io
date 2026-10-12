@@ -1,0 +1,72 @@
+= Arch Linux
+:description: Install the Yoga Book package set on Arch Linux.
+
+This guide configures Imanuel Ulbricht's Arch package repository, installs the Yoga Book package set, and shows a `systemd-boot` entry for the Yoga Book kernel.
+
+Source guide:: https://arch.yogabook.ulbricht.casa/[arch.yogabook.ulbricht.casa]
+Last reviewed:: 2026-10-12
+
+include::partial$distribution-trust.adoc[]
+
+== Add the signing key
+
+Download the repository key, import it into pacman's keyring, and locally sign it:
+
+[source,console]
+----
+wget -O sign.gpg https://packages.ulbricht.casa/api/packages/linux-yogabook/arch/repository.key
+sudo pacman-key --add sign.gpg
+sudo pacman-key --lsign-key 'linux-yogabook@noreply.packages.ulbricht.casa'
+----
+
+Verify the displayed fingerprint against a trusted channel before locally signing the key.
+
+== Add the repository
+
+Append the repository definition to `/etc/pacman.conf`:
+
+[source,console]
+----
+sudo tee -a /etc/pacman.conf <<'EOF'
+[linux-yogabook.packages.ulbricht.casa]
+Server = https://packages.ulbricht.casa/api/packages/linux-yogabook/arch/yogabook/$arch
+EOF
+----
+
+== Install the package set
+
+[source,console]
+----
+sudo pacman -Syu yogabook-keyboard alsa-ucm-conf-yogabook linux-yogabook linux-yogabook-headers intel-ucode yogabook-sensors yogabook-gnss yogabook-camera yogabook-validator
+----
+
+== Configure systemd-boot
+
+The packaged kernel is named `vmlinuz-linux-yogabook`; its initramfs is `initramfs-linux-yogabook.img`. The Yoga Book uses an Intel Atom x5, so load `intel-ucode` before the initramfs.
+
+Create `/boot/loader/entries/yogabook.conf`:
+
+[source,text]
+----
+title Arch Linux for Yoga Book
+linux /vmlinuz-linux-yogabook
+initrd /intel-ucode.img
+initrd /initramfs-linux-yogabook.img
+options # Copy the working kernel options for this installation here
+----
+
+Replace the `options` placeholder with the installation's existing root, encryption, graphics, and other required kernel parameters. Keep a known-good boot entry while testing.
+
+To select the new entry by default, set this line in `/boot/loader/loader.conf`:
+
+[source,text]
+----
+default yogabook.conf
+----
+
+The source guide documents only `systemd-boot`. Adapt the kernel, initramfs, and microcode paths according to the documentation for any other bootloader.
+
+== Build sources
+
+The Arch package build scripts and pipelines are maintained in the https://gitlab.imanuel.dev/packages/yogabook/building/pacman-build[pacman-build project].
+

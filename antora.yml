@@ -1,0 +1,7 @@
+name: yoga-book
+title: Yoga Book Linux
+version: ~
+start_page: ROOT:index.adoc
+nav:
+  - modules/ROOT/nav.adoc
+

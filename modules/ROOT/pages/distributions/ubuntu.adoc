@@ -1,0 +1,53 @@
+= Ubuntu
+:description: Install the Yoga Book package set on a supported Ubuntu release.
+
+This guide configures Imanuel Ulbricht's Ubuntu package repository and installs the Yoga Book package set.
+
+Source guide:: https://ubuntu.yogabook.ulbricht.casa/[ubuntu.yogabook.ulbricht.casa]
+Last reviewed:: 2026-10-12
+
+include::partial$distribution-trust.adoc[]
+
+== Ubuntu 24.04 LTS (Noble Numbat)
+
+[source,console]
+----
+sudo install -d -m 0755 /etc/apt/keyrings
+sudo curl --fail --silent --show-error \
+  --output /etc/apt/keyrings/yogabook-archive-keyring.asc \
+  --url https://gitlab.imanuel.dev/api/v4/projects/387/debian_distributions/noble/key.asc
+echo 'deb [signed-by=/etc/apt/keyrings/yogabook-archive-keyring.asc] https://gitlab.imanuel.dev/api/v4/projects/387/packages/debian noble main' \
+  | sudo tee /etc/apt/sources.list.d/yogabook-project.list
+sudo apt-get update
+----
+
+== Ubuntu 25.10 (Questing Quokka)
+
+WARNING: Ubuntu 25.10 reached end of life on **2026-07-09** and no longer receives Ubuntu security updates. The commands below are retained to document the source page, not as a recommendation for a new installation. Ubuntu identifies 26.04 LTS as the supported upgrade path.
+
+[source,console]
+----
+sudo install -d -m 0755 /etc/apt/keyrings
+sudo curl --fail --silent --show-error \
+  --output /etc/apt/keyrings/yogabook-archive-keyring.asc \
+  --url https://gitlab.imanuel.dev/api/v4/projects/388/debian_distributions/questing/key.asc
+echo 'deb [signed-by=/etc/apt/keyrings/yogabook-archive-keyring.asc] https://gitlab.imanuel.dev/api/v4/projects/388/packages/debian questing main' \
+  | sudo tee /etc/apt/sources.list.d/yogabook-project.list
+sudo apt-get update
+----
+
+== Install the package set
+
+[source,console]
+----
+sudo apt install linux-image-yogabook linux-headers-yogabook yogabook-support touch-keyboard alsa-ucm-conf-yogabook
+----
+
+Keep the generic Ubuntu kernel installed as a fallback until the Yoga Book kernel and device-specific packages have passed the required physical checks.
+
+For a complete Yoga Book system image rather than packages on an existing installation, use the xref:get-started.adoc[Ubuntu Autoinstall workflow].
+
+== Build sources
+
+The linked source page provides its package build sources and pipeline through the https://gitlab.imanuel.dev/packages/yogabook[Yoga Book packaging projects].
+
