@@ -6,7 +6,7 @@
 ====
 [.eyebrow]#YOGA BOOK LINUX#
 
-== One device. Every layer.
+[.hero-title]#One device. Every layer.#
 
 Community-led Linux enablement for the original Intel-based Lenovo Yoga Book:
 kernel, input, audio, sensors, cameras, location, installation, and validation.

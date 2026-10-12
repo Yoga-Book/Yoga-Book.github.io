@@ -36,12 +36,13 @@ body {
     repeating-linear-gradient(45deg, transparent 0 18px, rgba(255, 255, 255, .06) 18px 19px);
 }
 
-.doc .hero h2 {
+.doc .hero .hero-title {
+  display: block;
   max-width: 13ch;
   margin: .2rem 0 .75rem;
-  border: 0;
   color: #fff;
   font-size: clamp(2.4rem, 6vw, 5.2rem);
+  font-weight: 700;
   line-height: .98;
   letter-spacing: -.045em;
 }
