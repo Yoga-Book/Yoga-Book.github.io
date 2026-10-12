@@ -94,6 +94,8 @@ This installs the patched kernel and headers, Halo keyboard driver, ALSA UCM con
 
 Keep the distribution kernel installed as a recovery option until the Yoga Book kernel has passed the required physical checks.
 
+include::partial$distribution-verify.adoc[]
+
 include::partial$distribution-continue.adoc[]
 
 == Build sources

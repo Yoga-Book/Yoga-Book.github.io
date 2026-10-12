@@ -1,0 +1,141 @@
+= Validate an installed system
+:description: Use Yoga Book Validator and physical observations to assess a YB1-X91L installation.
+
+https://github.com/Yoga-Book/Yoga-Book-Validator[Yoga Book Validator,window=_blank] is the integration-test suite for YB1-X91L.
+It checks the installed system without taking ownership of drivers or device configuration.
+
+Source reviewed:: 2026-10-12
+
+== Start with safe diagnostics
+
+Record the device, kernel, operating system, and failed services before changing the system:
+
+[source,console]
+----
+cat /sys/class/dmi/id/product_name
+uname -a
+cat /etc/os-release
+systemctl --failed
+yogabook-validator check
+----
+
+`check` is the quick read-only full-stack audit.
+For deeper read-only coverage without administrator access or state changes, run:
+
+[source,console]
+----
+yogabook-validator passive
+----
+
+The graphical application and command-line interface use the same report engine.
+
+== Choose the appropriate test scope
+
+[cols="2,4",options="header"]
+|===
+|Command |Purpose
+
+|`yogabook-validator check`
+|Quick installed-stack, identity, service, package, and current-boot audit.
+
+|`yogabook-validator passive`
+|Deeper platform, display, sensor, power, USB, and GNSS inspection without changing state.
+
+|`yogabook-validator automated`
+|Runs the non-suspend automated suite, continues after failures, preserves subreports, and creates a merged result.
+
+|`yogabook-validator quiet`
+|Runs the non-audible automated subset; excludes playback, capture, headset, haptics, suspend, and guided actions.
+
+|`yogabook-validator category recommended`
+|Runs the project's recommended category selection.
+
+|`yogabook-validator --help`
+|Shows the exact command set provided by the installed Validator release.
+|===
+
+Tests such as audio, camera, haptics, controls, modes, rotation, storage write, USB cycling, charging, modem, GNSS fix, and suspend have physical prerequisites or temporarily alter state.
+Read the prompt and the project documentation before running them.
+
+== Safety model
+
+State-changing Validator actions snapshot relevant mutable state, register cleanup, and compare the system after restoration.
+A `validator/state-preservation` failure is a real failure even if the main device operation appeared successful.
+
+Some checks deliberately require authorization.
+Do not interrupt a guided test unless necessary; if interrupted, inspect its cleanup and state-preservation result before continuing.
+
+The Validator avoids retaining sensitive data such as coordinates, device identities, removable-media identifiers, SIM identifiers, nearby Bluetooth identities, raw recordings, or screen contents in ordinary reports.
+Review any bundle before publishing it.
+
+== Interpret results correctly
+
+[cols="1,4",options="header"]
+|===
+|Result |Meaning
+
+|`PASS`
+|The stated check and evidence layer passed; it does not prove another layer.
+
+|`WARN`
+|A non-fatal anomaly remains and requires review.
+
+|`FAIL`
+|The check or one of its prerequisites failed.
+
+|`SKIP`
+|A prerequisite was absent or the check was not exercised; coverage remains incomplete.
+
+|`INCOMPLETE`
+|At least one required selector ran but was skipped.
+
+|`NOT_RUN`
+|A runnable required selector is absent from the selected reports.
+
+|`UNIMPLEMENTED`
+|The acceptance model requires evidence that this Validator release cannot produce.
+
+|`STALE`
+|Previously passing evidence exceeded its defined freshness window.
+|===
+
+A coverage percentage measures checks exercised; it is not a release-readiness percentage.
+Complete component acceptance requires all applicable structural, functional, and physical layers.
+
+== Physical acceptance checklist
+
+The authoritative
+https://github.com/Yoga-Book/Yoga-Book-Validator/blob/main/docs/coverage.md[coverage matrix,window=_blank]
+defines 24 component rows.
+At minimum, a release record must explicitly cover:
+
+* cold boot, the running and persistent kernel, reboot, and poweroff;
+* DSI display stability, brightness, rotation, touch, and pen mapping;
+* Halo keyboard, touchpad, mode switching, backlight, and both haptic actuators;
+* speakers, internal microphones, headset playback/capture, jack detection, and buttons;
+* front and rear cameras, switching, orientation, focus, color, and sustained operation;
+* Wi-Fi traffic, Bluetooth pairing/data or audio, LTE traffic, and outdoor GNSS;
+* USB OTG, Micro-HDMI video/audio, eMMC, and SD-card behavior;
+* battery telemetry, charging, thermals, and resource stability;
+* lid, power, volume, indicator, and charging-light behavior; and
+* suspend/resume recovery of the applicable display, input, audio, storage, radio, camera, and service state.
+
+Conditional rows remain incomplete until their hardware or environment is supplied.
+
+== Preserve an evidence set
+
+Keep together:
+
+* the exact device model and firmware revision;
+* distribution release and installed package versions;
+* running kernel release and persistent boot selection;
+* Validator version and complete report directory;
+* ISO or package digests and provenance;
+* boot identifier and timestamps;
+* installer and graphical-health logs when applicable; and
+* dated physical observations, including failures and skipped prerequisites.
+
+Do not combine reports from different Validator releases, devices, operating systems, architectures, or package inventories unless the Validator's dossier workflow explicitly accepts them.
+
+Continue with xref:troubleshooting.adoc[Troubleshooting] when a check fails, or xref:contributing.adoc[Contributing] when reporting the result.
+

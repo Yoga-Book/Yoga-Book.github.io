@@ -46,7 +46,9 @@ The organization separates platform, installation, validation, and userspace con
 
 Read-only upstream desktop mirrors and archived experiments may also appear in the https://github.com/orgs/Yoga-Book/repositories[complete repository list], but they are not recommended starting points for users.
 
-== Documentation roadmap
+== Documentation ownership
 
-This site begins as a curated organization-level guide. As project documentation adopts Antora's component structure, the playbook can aggregate those repositories into one searchable, version-aware site without moving ownership away from each project.
+This site is the curated organization-level handbook: installation paths, support boundaries, cross-project architecture, validation, and troubleshooting.
+
+Exact build procedures, implementation details, release manifests, and component-specific acceptance records remain in the repository that owns them. The handbook links those sources and records its review date instead of silently presenting a copied procedure as permanently current.
 

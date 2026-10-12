@@ -9,10 +9,12 @@ Use Node.js 24 (the active LTS release targeted by CI), then run:
 ```console
 npm ci
 task build
+task check
 task preview
 ```
 
 The generated site is written to `build/site` and the preview is served at <http://localhost:8080>.
+`task check` performs the strict Antora build and verifies generated internal links and anchors; the Pages workflow runs the same check before deployment.
 
 Antora reads the active Git worktree, so local content edits are included in the next build without committing them first.
 
@@ -24,7 +26,7 @@ Antora reads the active Git worktree, so local content edits are included in the
 - `modules/ROOT/nav.adoc` defines navigation.
 - `supplemental-ui/` contains Yoga Book styling layered over the upstream default UI.
 
-Project-specific technical documentation should stay in the repository that owns it. Once a project exposes an `antora.yml` component, add its repository and branch policy to the playbook rather than copying its documentation here.
+This repository currently builds a self-contained, curated handbook without project documentation submodules. Project-specific implementation details remain authoritative in the repository that owns them; handbook pages summarize cross-project workflows, link their sources, and record when those sources were reviewed.
 
 ## Publishing
 

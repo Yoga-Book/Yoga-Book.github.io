@@ -21,5 +21,26 @@ A useful report or change records:
 
 == Improve this site
 
-Organization-level navigation and shared guidance live in the https://github.com/Yoga-Book/Yoga-Book.github.io[site repository]. Project-specific technical documentation should remain with the project that owns it and can later be included here as an Antora component.
+Organization-level navigation and shared guidance live in the https://github.com/Yoga-Book/Yoga-Book.github.io[site repository]. Project-specific implementation documentation remains in the repository that owns it; this handbook summarizes cross-project workflows and links the authoritative source.
+
+For a handbook change:
+
+* identify the authoritative project document or physical evidence behind the statement;
+* record a review date when summarizing information that can become stale;
+* distinguish YB1-X91L evidence from assumptions about other variants;
+* distinguish a build, VM result, automated result, functional check, and physical observation;
+* give destructive or state-changing commands an explicit warning, target, prerequisite, and recovery path;
+* include expected output or a clear success condition where practical;
+* link to the owning project instead of duplicating volatile version lists; and
+* never publish credentials, serial numbers, private firmware, or unreviewed Validator bundles.
+
+Build and verify the generated site before submitting a change:
+
+[source,console]
+----
+npm ci
+task check
+----
+
+`task check` runs the strict Antora build and verifies generated internal links and anchors.
 

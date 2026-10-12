@@ -1,0 +1,290 @@
+= Troubleshooting
+:description: Safe, symptom-oriented diagnostics for Yoga Book Linux installations.
+
+Start by collecting evidence without changing the machine.
+Do not reinstall, remove the fallback kernel, overwrite logs, or bypass an installer safety check merely to see whether the symptom changes.
+
+Last reviewed:: 2026-10-12
+
+== Baseline triage
+
+Record the following with the failure description:
+
+[source,console]
+----
+cat /sys/class/dmi/id/product_name
+uname -a
+cat /etc/os-release
+systemctl --failed
+yogabook-validator check
+----
+
+Also record:
+
+* the firmware revision and Secure Boot state;
+* exact package versions and repository suite;
+* whether the failure began after an installation, upgrade, reboot, resume, or mode switch;
+* the difference between expected and observed behavior; and
+* whether the result is automated, VM-only, or physically observed.
+
+Preserve the complete output instead of copying only the line that appears relevant.
+
+== Installer stops with `AUTOINSTALL SAFETY ABORT`
+
+This is a protective failure before storage configuration.
+Do not bypass it.
+
+Confirm that:
+
+* the device is exactly YB1-X91L;
+* exactly one non-removable MMC device reports model `CJNB4R`;
+* the selected disk exposes matching `boot0` and `boot1` devices;
+* the `ED4QT` microSD is not being treated as the internal disk;
+* Secure Boot is explicitly disabled; and
+* the USB contains the production image, not a VM-test image.
+
+If `mokutil` is missing or cannot determine Secure Boot state, the production guard intentionally fails closed.
+Use the
+https://github.com/Yoga-Book/Ubuntu-Autoinstall/blob/main/docs/troubleshooting.adoc[installer troubleshooting guide,window=_blank]
+for build, schema, package, USB-writing, and VM failures.
+
+== Black screen or boot console remains visible
+
+First determine whether the failure is in the kernel/DRM path or the display-manager/desktop path:
+
+[source,console]
+----
+uname -r
+cat /etc/default/grub.d/60-yogabook.cfg
+systemctl status gdm yogabook-graphical-health --no-pager
+sudo cat /var/log/yogabook-graphical-health/boot.log
+for F in /sys/class/drm/card*-DSI-*/{status,enabled,modes}; do
+  test -f "$F" && printf '%s\n' "--- $F" && cat "$F"
+done
+sudo journalctl -b -u gdm --no-pager
+sudo journalctl -b -k --no-pager | grep -Ei 'drm|i915|dsi|panel|firmware|error|fail'
+----
+
+`Started gdm.service` does not prove that GNOME's Wayland greeter acquired the DSI display.
+
+If the generic kernel reaches GNOME but the Yoga Book kernel does not, preserve the graphical-health evidence and investigate the kernel/i915/DSI path.
+If both kernels expose a healthy connector but GNOME Shell fails, investigate GDM, Mutter, and desktop integration.
+
+Do not remove the generic kernel while diagnosing.
+
+== System boots the wrong kernel
+
+[source,console]
+----
+uname -r
+cat /etc/default/grub.d/60-yogabook.cfg
+ls -l /boot/vmlinuz-* /boot/initrd.img-*
+grep -F 'yogabook' /boot/grub/grub.cfg
+----
+
+On the Ubuntu Autoinstall system, refresh selection with:
+
+[source,console]
+----
+sudo yogabook-select-kernel
+----
+
+The selector should choose the newest installed `vmlinuz-*-yogabook-*` kernel and regenerate GRUB atomically.
+Do not delete `/var/lib/yogabook-graphical-health/generic-fallback-configured` until its saved evidence has been copied and the cause of fallback is understood.
+
+Other distributions use their own bootloader configuration; follow the relevant xref:distributions/index.adoc[distribution guide].
+
+== Package or service failure
+
+For Debian or Ubuntu:
+
+[source,console]
+----
+sudo dpkg --audit
+sudo apt-get --no-download check
+dpkg-query -W 'linux-image*yogabook*' 'linux-headers*yogabook*' \
+  halo-keyboard alsa-ucm-conf-yogabook yogabook-sensors \
+  yogabook-gnss yogabook-camera yogabook-validator
+----
+
+For systemd services:
+
+[source,console]
+----
+systemctl --failed
+systemctl status halo-keyboard yogabook-gnss yogabook-camera --no-pager
+journalctl -b -p warning..alert --no-pager
+----
+
+Service names and package composition can differ by distribution and release.
+Treat `unit not found` separately from a unit that exists and failed.
+
+== Halo keyboard, touchpad, pen, or haptics
+
+Establish whether the device topology and service are present before changing layouts:
+
+[source,console]
+----
+systemctl status halo-keyboard.service --no-pager
+journalctl -b -u halo-keyboard.service --no-pager
+yogabook-validator inputs
+yogabook-validator pen-stack
+----
+
+For a guided keyboard-to-pen-to-keyboard transition:
+
+[source,console]
+----
+yogabook-validator modes
+----
+
+For bounded haptic output:
+
+[source,console]
+----
+yogabook-validator haptics
+----
+
+These actions cannot establish pen pressure, touch accuracy, key feel, or haptic sensation without physical observation.
+The handler configuration lives under `/etc/halo-keyboard/`; preserve it before changing the active layout.
+
+== Rotation, proximity, or thermal policy
+
+[source,console]
+----
+yogabook-validator sensors
+yogabook-validator resources
+systemctl status iio-sensor-proxy thermald --no-pager
+monitor-sensor --accel
+----
+
+Yoga Book Sensors must classify two accelerometers as `display` and two as `base`, supply the SX9310 proximity threshold, and start thermald with the generated runtime configuration under `/run/thermald/`.
+
+Do not replace the thermal policy or force charging behavior while investigating a sensor classification problem.
+Use `yogabook-validator rotation` or `sensor-interactions` only when prepared to complete the guided physical transitions and restore the initial posture.
+
+== No sound or microphone
+
+The audio path crosses the kernel driver, SST or SOF firmware/topology, ALSA UCM, mixer state, PipeWire/WirePlumber, and the application.
+Check each boundary:
+
+[source,console]
+----
+aplay -l
+arecord -l
+alsaucm listcards
+wpctl status
+yogabook-validator audio
+----
+
+Do not persist an ALSA state captured while WirePlumber is stopped or while a route is temporarily muted.
+The Validator's audio action saves and restores mixer and desktop-audio state and uses bounded playback/capture, but intelligibility and audible quality still require physical observation.
+
+For a four-pole headset, use the conditional guided test:
+
+[source,console]
+----
+yogabook-validator headset
+----
+
+== Camera is absent, green, black, or unstable
+
+Start with the release-matched kernel, headers, loopback module, and service:
+
+[source,console]
+----
+uname -r
+systemctl status yogabook-camera.service --no-pager
+journalctl -b -u yogabook-camera.service --no-pager
+v4l2-ctl --list-devices
+yogabook-validator camera
+----
+
+The OV2740 front and OV8858 rear sensors share one AtomISP stream.
+Applications consume processed V4L2 loopback endpoints rather than the private raw AtomISP node.
+AtomISP's poll path is unsupported, so a `--stream-poll` timeout alone does not prove transport failure.
+
+Camera transport, processed-frame integrity, browser enumeration, sensor switching, focus, color, image quality, CPU use, and thermals are separate checks.
+Do not enable AtomISP private ioctls as a generic workaround; the camera project documents a prior unsafe parameter path.
+
+See the
+https://github.com/Yoga-Book/Yoga-Book-Camera/blob/main/docs/STATUS.md[current camera status,window=_blank]
+and
+https://github.com/Yoga-Book/Yoga-Book-Camera/blob/main/docs/ACCEPTANCE.md[acceptance gates,window=_blank].
+
+== GNSS does not produce a location
+
+The package cannot ship the proprietary initialization runtime.
+Confirm that the supported runtime was imported successfully before debugging gpsd:
+
+[source,console]
+----
+systemctl status yogabook-gnss.service gpsd.socket --no-pager
+sudo yogabook-gnss-health
+gpspipe -w
+----
+
+An indoor receiver may transport NMEA data without producing SKY data or a fix.
+Strict acceptance requires an outdoor test with a clear sky view and can take several minutes after a cold start:
+
+[source,console]
+----
+sudo yogabook-gnss-health --require-sky
+sudo yogabook-gnss-health --require-fix
+----
+
+The service intentionally disables SUPL and HTTP LTO because the isolated Linux integration has no Android RIL/network callbacks.
+Satellite-only positioning remains available.
+
+== Wi-Fi, Bluetooth, LTE, USB, storage, or power
+
+Use the narrowest applicable Validator action:
+
+[source,console]
+----
+yogabook-validator wireless
+yogabook-validator modem
+yogabook-validator usb
+yogabook-validator storage
+yogabook-validator power
+yogabook-validator charging
+----
+
+`wireless` uses the current Wi-Fi gateway and bounded Bluetooth discovery.
+`modem` requires an already registered and connected bearer and does not enable or connect it.
+`usb` is passive; `usb-cycle` guides insertion and removal.
+`storage` is read-only; `storage-write` is a separate explicitly confirmed action.
+`charging` requires connected power and observes a bounded interval.
+
+Do not convert a missing SIM, accessory, SD card, charger, or network route into a pass.
+Record the result as conditional and incomplete.
+
+== Suspend or resume regression
+
+Before testing suspend, save ordinary diagnostics and close unrelated work.
+The Validator suspend action is opt-in and checks the before/after state of applicable display, input, sensor, radio, camera, storage, modem, GNSS, audio, and service paths:
+
+[source,console]
+----
+yogabook-validator suspend
+----
+
+A resumed desktop does not by itself prove audio, radios, cameras, or service state recovered.
+Preserve the complete report and current-boot journal after a failure.
+
+== Prepare a useful issue report
+
+Include:
+
+* exact hardware model and firmware revision;
+* distribution, package versions, and running kernel;
+* the smallest repeatable procedure;
+* expected and observed behavior;
+* complete relevant command output and logs;
+* Validator version and report or reviewed support bundle;
+* whether the result is automated, VM-only, or physically observed; and
+* any recovery action already attempted.
+
+Do not publish credentials, serial numbers, SIM identifiers, private firmware, GNSS runtime files, or other sensitive data.
+Use xref:projects.adoc[the project map] to report the problem to the lowest failing owner.
+

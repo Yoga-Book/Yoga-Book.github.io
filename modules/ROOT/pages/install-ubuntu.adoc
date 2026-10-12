@@ -1,0 +1,172 @@
+= Install Ubuntu 26.04 on YB1-X91L
+:description: Build, write, install, and validate the Ubuntu 26.04 Yoga Book integration image safely.
+
+This guide is the organization-level path through the
+https://github.com/Yoga-Book/Ubuntu-Autoinstall[Ubuntu Autoinstall project,window=_blank].
+The project README remains authoritative for exact artifact names, package versions, build requirements, and release-specific acceptance records.
+
+Source reviewed:: 2026-10-12
+Target device:: Lenovo Yoga Book `YB1-X91L`
+Installation type:: Offline, unattended, whole-disk replacement
+
+[WARNING]
+====
+The production installer erases the complete internal `CJNB4R` eMMC.
+It does not provide dual boot, partition preservation, or an in-place upgrade.
+Back up all required data and prove that the backup is readable before booting the installer.
+====
+
+== Understand the release boundary
+
+The build produces a *candidate image*.
+A successful build and VM installation prove the software pipeline, not the physical tablet.
+Do not describe an image as recovery-ready until the matching YB1-X91L physical-acceptance procedure is complete and its evidence is preserved.
+
+The production storage guard refuses to continue unless it can establish all of these conditions:
+
+* the DMI product name is exactly `Lenovo YB1-X91L`;
+* exactly one non-removable MMC disk identifies itself as `CJNB4R`;
+* that disk exposes matching `boot0` and `boot1` devices, distinguishing it from the `ED4QT` microSD; and
+* `mokutil` reports that Secure Boot is disabled.
+
+An `AUTOINSTALL SAFETY ABORT` is a protective result.
+Do not bypass the guard or substitute a hard-coded `/dev/mmcblkN` device name.
+
+== Prepare
+
+You need:
+
+* an Ubuntu amd64 build host;
+* Task 3.x and Docker;
+* at least 30 GiB of free build space;
+* Internet access while building;
+* an 8 GB or larger USB drive;
+* a powered USB/OTG hub and external power for the Yoga Book; and
+* a complete, verified backup of the internal eMMC.
+
+The installed Yoga Book does not require network access during installation because the image contains the selected packages and their dependency closure.
+
+The Yoga Book kernel is unsigned.
+Secure Boot must remain disabled while using it.
+Keep the generic Ubuntu kernel installed as a recovery path.
+
+== Build and verify the production image
+
+Clone the integration repository on the build host and use its guarded workflow:
+
+[source,console]
+----
+git clone https://github.com/Yoga-Book/Ubuntu-Autoinstall.git
+cd Ubuntu-Autoinstall
+task setup
+task build
+----
+
+`task build` performs a clean production build, verifies pinned source assets, resolves the offline package closure, validates the rendered autoinstall data, remasters the hybrid ISO, and verifies the resulting image and checksum sidecar.
+
+Before copying an existing build, rerun its verification:
+
+[source,console]
+----
+task iso:verify
+----
+
+Do not write a `*-test-autoinstall.iso` to physical media.
+VM-test images deliberately bypass the hardware identity, eMMC-model, and Secure Boot guards.
+
+== Write the USB drive
+
+Use the project workflow instead of invoking `dd` manually:
+
+[source,console]
+----
+task iso:burn:usb
+----
+
+The task revalidates the ISO, presents eligible whole USB disks, requires an exact destructive-action confirmation, unmounts supported desktop mounts, writes the image, flushes it, and verifies the ISO-length bytes read back from the device.
+
+To clean-build and then write the image:
+
+[source,console]
+----
+task iso:build:burn:usb
+----
+
+Read the selected device path and identity carefully before confirming.
+
+== Install on the Yoga Book
+
+. Prove that the eMMC backup can be read.
+. Disable Secure Boot in the firmware settings.
+. Connect the written USB drive and external power through a powered OTG hub.
+. Boot from USB.
+. Let the `Ubuntu Autoinstall` entry start, or interrupt its one-second countdown to select a diagnostic entry.
+. Leave the production installation unattended. A safety mismatch must abort before storage configuration; success powers the tablet off.
+. Remove the USB drive and boot from the internal eMMC.
+. Allow up to three minutes for the first graphical boot.
+
+If the Yoga Book kernel does not expose a healthy DSI/GDM session, the installed graphical-health service saves evidence, selects the preserved generic Ubuntu kernel, and reboots once.
+It does not retry that fallback indefinitely.
+
+The current default credentials are published by the integration project:
+
+[cols="1,1",options="header"]
+|===
+|Username |Password
+|`yoga` |`yoga`
+|===
+
+Change the password immediately:
+
+[source,console]
+----
+passwd
+----
+
+== Verify the first boot
+
+Preserve `/var/log/installer/` and `/var/log/installer/autoinstall-media/` before making unrelated system changes.
+Then record the basic system state:
+
+[source,console]
+----
+cat /sys/class/dmi/id/product_name
+uname -r
+sudo dpkg --audit
+sudo apt-get --no-download check
+systemctl --failed
+sudo systemctl status yogabook-graphical-health.service --no-pager
+sudo cat /var/log/yogabook-graphical-health/boot.log
+----
+
+The expected product name is `Lenovo YB1-X91L`.
+The running kernel should contain `yogabook` unless the graphical-health service deliberately selected the generic fallback.
+
+Continue with xref:validation.adoc[Validate the installed system].
+Automated checks do not replace observing the display, input modes, sound, cameras, radios, suspend/resume, reboot, and poweroff on the physical tablet.
+
+== Recovery boundaries
+
+The image preserves Ubuntu's generic kernel as a fallback.
+While diagnosing a graphical failure, do not uninstall it and do not erase the saved fallback evidence.
+
+Collect these records first:
+
+[source,console]
+----
+uname -r
+cat /etc/default/grub.d/60-yogabook.cfg
+sudo cat /var/log/yogabook-graphical-health/boot.log
+sudo cat /var/lib/yogabook-graphical-health/generic-fallback-configured
+systemctl status gdm yogabook-graphical-health --no-pager
+----
+
+See xref:troubleshooting.adoc[Troubleshooting] for display, kernel-selection, service, and evidence-collection procedures.
+
+== Authoritative project references
+
+* https://github.com/Yoga-Book/Ubuntu-Autoinstall[Build and installation README,window=_blank]
+* https://github.com/Yoga-Book/Ubuntu-Autoinstall/blob/main/docs/troubleshooting.adoc[Detailed troubleshooting,window=_blank]
+* https://github.com/Yoga-Book/Ubuntu-Autoinstall/blob/main/docs/architecture.adoc[Trust and build architecture,window=_blank]
+* https://github.com/Yoga-Book/Ubuntu-Autoinstall/blob/main/docs/hardware-test-result.adoc[Physical-acceptance record template,window=_blank]
+

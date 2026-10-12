@@ -26,6 +26,14 @@ These levels complement one another. None should be silently promoted into a str
 
 The **YB1-X91L** is the primary integration and physical-acceptance target. Support for other original Yoga Book variants is repository-specific; consult the relevant project before reusing packages or installation media.
 
+xref:hardware-support.adoc[Review the subsystem boundaries and cross-system constraints →]
+
+== Validate a claim
+
+The xref:validation.adoc[validation guide] maps Validator results to structural, functional, and physical evidence. A coverage percentage is diagnostic progress, not a release-readiness percentage.
+
+For a complete installation candidate, keep the exact ISO or package digests, installer logs, Validator report, package inventory, and dated physical observations together. Evidence from a different device, kernel, package set, or Validator release must not be silently reused.
+
 == Reporting a problem
 
 Include:
@@ -37,4 +45,6 @@ Include:
 * whether the result came from automation, a virtual machine, or the physical tablet.
 
 Do not publish credentials, serial numbers, private firmware, or other sensitive data.
+
+xref:troubleshooting.adoc[Collect symptom-specific diagnostics →]
 

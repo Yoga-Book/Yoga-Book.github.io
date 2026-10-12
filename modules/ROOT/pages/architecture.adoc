@@ -1,0 +1,137 @@
+= System architecture
+:description: How the Yoga Book kernel, services, desktop, packages, and validation layers fit together.
+
+Yoga Book Linux spans several independently owned layers.
+Understanding the boundary between them prevents a symptom from being assigned to the wrong project.
+
+Last reviewed:: 2026-10-12
+
+== Layer model
+
+[cols="1,2,3",options="header"]
+|===
+|Layer |Examples |Responsibility
+
+|Hardware and firmware
+|ACPI, DMI, embedded controllers, sensor hubs, audio DSP, AtomISP, BCM4752, XMM7260
+|Device identity, wiring, firmware-described topology, and hardware behavior.
+
+|Kernel
+|Yoga Book kernel, DRM/i915, input, IIO, ALSA/SOF, AtomISP, MMC, USB, UART
+|Expose safe kernel interfaces and device drivers. The kernel does not provide desktop policy or final userspace routing.
+
+|Device userspace
+|Halo Keyboard, Sensors, Camera, GNSS
+|Translate or classify Yoga Book-specific interfaces and provide narrowly scoped services.
+
+|Audio configuration
+|SOF firmware/topology and ALSA UCM
+|Load the DSP path and describe usable speaker, microphone, and headset routes to the desktop audio stack.
+
+|Desktop integration
+|GNOME Shell, Mutter, Control Center, SensorProxy, PipeWire, gpsd, ModemManager
+|Apply display transforms, expose settings, route media, and integrate standard Linux applications.
+
+|Distribution integration
+|DEB, pacman, and APK repositories; Ubuntu Autoinstall
+|Deliver compatible kernel and userspace artifacts, boot selection, dependencies, and installation safeguards.
+
+|Validation
+|Yoga Book Validator and release-specific physical records
+|Measure structural, functional, and physical evidence without becoming the owner of the implementation.
+|===
+
+== Boot and graphical path
+
+[source,text]
+----
+Firmware
+  -> bootloader
+    -> selected Yoga Book or recovery kernel
+      -> i915/DRM exposes the DSI panel
+        -> GDM starts GNOME Shell and Mutter
+          -> graphical-health service records health or selects fallback once
+----
+
+`Started gdm.service` only proves that systemd launched the display manager.
+It does not prove that the DSI connector is usable or that GNOME Shell acquired it.
+Use kernel/DRM evidence and GDM/Mutter evidence to distinguish those failures.
+
+== Input and rotation path
+
+[source,text]
+----
+Kernel input and IIO devices
+  -> udev/hwdb classification
+    -> Halo Keyboard and iio-sensor-proxy
+      -> Mutter display transform and application input
+----
+
+Halo Keyboard owns keyboard-half translation, touchpad emulation, haptics, mode integration, and its backlight.
+Yoga Book Sensors classifies the otherwise identical display/base accelerometers and supplies proximity and thermal policy.
+Mutter remains responsible for display orientation and for mapping pen coordinates through the active transform.
+
+== Audio path
+
+[source,text]
+----
+Kernel ALSA driver
+  -> SST or SOF firmware/topology
+    -> ALSA UCM route definitions
+      -> PipeWire/WirePlumber
+        -> desktop applications
+----
+
+A visible ALSA card is not sufficient evidence that speakers or microphones work.
+The matching firmware/topology, UCM device, mixer state, desktop graph, bounded transport test, and physical observation are separate checkpoints.
+
+== Camera path
+
+[source,text]
+----
+OV2740 or OV8858 sensor
+  -> AtomISP2401 kernel transport
+    -> Yoga Book userspace processing
+      -> V4L2 loopback endpoint
+        -> PipeWire/browser/application
+----
+
+The front OV2740 and rear OV8858 share one physical AtomISP stream.
+The userspace service exposes stable front and rear application endpoints and switches the underlying sensor as required.
+Direct raw transport, processed-frame validity, application enumeration, sustained thermal behavior, and visible image quality are different acceptance stages.
+
+== GNSS path
+
+[source,text]
+----
+BCM4752
+  -> /dev/ttyS5
+    -> isolated user-imported Android/Bionic runtime
+      -> NMEA FIFO
+        -> Linux gpsd
+          -> GeoClue and applications
+----
+
+The open GNSS package supplies the importer, isolation, power sequence, service, FIFO bridge, AppArmor extension, and health check.
+It does not redistribute the proprietary Lenovo/Broadcom runtime.
+
+== Ownership rule
+
+Diagnose at the lowest failing boundary, then report the issue to that owner:
+
+* missing device or kernel error → kernel project;
+* present device but failed Yoga Book translation/service → owning userspace project;
+* working service but missing desktop behavior → desktop integration project;
+* inconsistent installation or dependency set → packaging or installer project;
+* incorrect check or report semantics → Validator project.
+
+xref:projects.adoc[Project map] lists the owning repositories.
+
+== Provenance and version coupling
+
+Kernel, headers, out-of-tree modules, firmware/topology, UCM, device services, desktop patches, and Validator expectations can be version-coupled.
+Record exact versions together and avoid combining artifacts merely because each one builds independently.
+
+The Ubuntu Autoinstall project maintains pinned manifests and an exact package inventory for each image candidate.
+Distribution repository users should preserve package-manager transaction records and keep a known-good boot path while evaluating updates.
+

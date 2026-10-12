@@ -37,6 +37,8 @@ This installs the patched kernel and development files, Halo keyboard support, A
 
 Keep a known-good boot path until the new kernel and OpenRC services have passed the required physical checks.
 
+include::partial$distribution-verify.adoc[]
+
 include::partial$distribution-continue.adoc[]
 
 == Build sources

@@ -64,6 +64,8 @@ Keep the generic Ubuntu kernel installed as a fallback until the Yoga Book kerne
 
 For a complete Yoga Book system image rather than packages on an existing installation, use the xref:get-started.adoc[Ubuntu Autoinstall workflow].
 
+include::partial$distribution-verify.adoc[]
+
 include::partial$distribution-continue.adoc[]
 
 == Build sources

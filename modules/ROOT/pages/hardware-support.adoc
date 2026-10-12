@@ -1,0 +1,107 @@
+= Hardware support boundaries
+:description: Device scope, subsystem ownership, constraints, and evidence requirements for Yoga Book Linux.
+
+Yoga Book Linux is an integration effort, not a single driver.
+A working system combines a device-specific kernel, firmware and topology, userspace services, desktop integration, packaging, and physical validation.
+
+Last reviewed:: 2026-10-12
+
+== Supported-device boundary
+
+The primary integration and physical-acceptance target is the Lenovo Yoga Book **YB1-X91L**.
+
+Do not assume that an artifact validated on YB1-X91L is safe or functional on YB1-X90F, YB1-X90L, YB1-X91F, or another Yoga Book generation.
+Model-specific support must be stated by the project that owns the artifact and backed by evidence from that exact model.
+
+[IMPORTANT]
+====
+The Ubuntu production autoinstaller is intentionally restricted to the exact DMI identity `Lenovo YB1-X91L` and the `CJNB4R` internal eMMC topology.
+It is not a generic Yoga Book installer.
+====
+
+== Integration map
+
+[cols="2,2,4",options="header"]
+|===
+|Subsystem |Owner |Current integration boundary
+
+|Kernel and platform
+|https://github.com/Yoga-Book/Yoga-Book-Linux-Kernel[Yoga Book Linux Kernel,window=_blank]
+|Device kernel, drivers, configuration, and the hardware interface consumed by userspace packages. A successful build does not establish tablet acceptance.
+
+|Installation and recovery
+|https://github.com/Yoga-Book/Ubuntu-Autoinstall[Ubuntu Autoinstall,window=_blank]
+|Offline Ubuntu 26.04 whole-disk candidate for YB1-X91L. The image is not recovery-ready until its release-specific physical record passes.
+
+|System validation
+|https://github.com/Yoga-Book/Yoga-Book-Validator[Yoga Book Validator,window=_blank]
+|Structural, functional, and guided physical evidence for 24 component areas. Skipped or missing conditional checks remain incomplete.
+
+|Halo keyboard, touchpad, pen mode, and haptics
+|https://github.com/Yoga-Book/Halo-Keyboard[Halo Keyboard,window=_blank]
+|Keyboard-half input translation, dual haptics, backlight, udev/hwdb, and libwacom integration. Mutter owns display transforms applied to the pen.
+
+|Rotation, proximity, and thermal policy
+|https://github.com/Yoga-Book/Yoga-Book-Sensors[Yoga Book Sensors,window=_blank]
+|Classifies the four accelerometers, provides the proximity threshold, and replaces unusable firmware thermal bindings with an X91L-scoped runtime policy.
+
+|Audio routing
+|https://github.com/Yoga-Book/Yoga-Book-ALSA-UCM-Config[ALSA UCM Config,window=_blank]
+|UCM2 routes for speakers, headset, digital microphones, and headset microphone under both legacy SST and SOF paths.
+
+|Audio firmware and topology
+|https://github.com/Yoga-Book/Yoga-Book-Sound-Open-Firmware[Sound Open Firmware,window=_blank]
+|Matching SOF firmware/topology required by the SOF audio path; separate from UCM and PipeWire policy.
+
+|Cameras
+|https://github.com/Yoga-Book/Yoga-Book-Camera[Yoga Book Camera,window=_blank]
+|Experimental AtomISP userspace pipeline for OV2740 front and OV8858 rear sensors. Transport evidence does not imply final image-quality acceptance.
+
+|GNSS
+|https://github.com/Yoga-Book/Yoga-Book-GNSS[Yoga Book GNSS,window=_blank]
+|BCM4752 transport and gpsd bridge. Requires a private runtime imported from the user's own supported Lenovo Android image; proprietary binaries are not redistributed.
+
+|LTE
+|Kernel, ModemManager, desktop integration, and Validator
+|XMM7260 transport is conditional on the X91L LTE hardware and a SIM. Registration and traffic require physical, coverage-dependent evidence.
+|===
+
+== Cross-system constraints
+
+Secure Boot:: The Yoga Book kernel is unsigned, so Secure Boot must be disabled.
+
+Recovery kernel:: Keep a known-good distribution kernel installed and bootable until the Yoga Book kernel passes the required checks.
+
+GNSS firmware:: The open package cannot redistribute Lenovo, Broadcom, or Android binaries. The user must supply and import the exact private runtime described by the GNSS project.
+
+Camera maturity:: Both sensors have transport and device-side evidence, but the camera stack remains experimental. Final image quality, browser behavior, switching, thermals, and kernel compatibility require release-specific physical acceptance.
+
+Conditional hardware:: LTE, GNSS sky/fix, Micro-HDMI, headset, USB accessories, and SD media cannot be fully accepted when their prerequisite is absent.
+
+== What a support claim means
+
+[cols="1,3",options="header"]
+|===
+|Claim |Required interpretation
+
+|Implemented
+|Code or configuration exists for the subsystem. It may not build, install, or operate on the tablet.
+
+|Packaged
+|An installable artifact exists. Packaging alone does not prove runtime behavior.
+
+|Structurally validated
+|Identity, driver, topology, package, or service state matches the stated expectation.
+
+|Functionally validated
+|A bounded operation or state transition completed and cleanup was checked.
+
+|Physically accepted
+|A person observed the stated behavior on the named hardware with recorded artifacts and environment.
+
+|Recovery-ready
+|The complete release-specific installation, recovery, and physical-acceptance procedure passed with preserved evidence.
+|===
+
+See xref:support-status.adoc[Support and evidence] for evidence semantics and xref:validation.adoc[System validation] for the practical workflow.
+

@@ -5,7 +5,9 @@
   "description": "Official documentation site for Yoga Book Linux",
   "scripts": {
     "build": "antora --clean --log-failure-level=warn antora-playbook.yml",
-    "build:fetch": "antora --clean --fetch --log-failure-level=warn antora-playbook.yml"
+    "build:fetch": "antora --clean --fetch --log-failure-level=warn antora-playbook.yml",
+    "check:links": "node scripts/check-internal-links.mjs build/site",
+    "check": "npm run build && npm run check:links"
   },
   "devDependencies": {
     "@antora/cli": "3.2",

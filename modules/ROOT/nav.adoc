@@ -1,11 +1,18 @@
 * xref:index.adoc[Home]
-* xref:get-started.adoc[Get started]
+* Start here
+** xref:get-started.adoc[Get started]
+** xref:install-ubuntu.adoc[Install Ubuntu 26.04]
+** xref:validation.adoc[Validate a system]
 * xref:distributions/index.adoc[Distributions]
 ** xref:distributions/arch.adoc[Arch Linux]
 ** xref:distributions/debian.adoc[Debian]
 ** xref:distributions/ubuntu.adoc[Ubuntu]
 ** xref:distributions/alpine.adoc[Alpine Linux]
+* Technical guide
+** xref:hardware-support.adoc[Hardware support]
+** xref:architecture.adoc[System architecture]
+** xref:troubleshooting.adoc[Troubleshooting]
+** xref:support-status.adoc[Support and evidence]
 * xref:projects.adoc[Projects]
-* xref:support-status.adoc[Support and evidence]
 * xref:contributing.adoc[Contributing]
 

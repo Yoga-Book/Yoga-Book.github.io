@@ -72,6 +72,8 @@ editor no
 
 The source guide documents only `systemd-boot`. Adapt the kernel, initramfs, and microcode paths according to the documentation for any other bootloader.
 
+include::partial$distribution-verify.adoc[]
+
 == Build sources
 
 The Arch package build scripts and pipelines are maintained in the https://gitlab.imanuel.dev/packages/yogabook/building/pacman-build[pacman-build project].

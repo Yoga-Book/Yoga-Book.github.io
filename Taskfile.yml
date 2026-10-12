@@ -16,6 +16,11 @@ tasks:
     cmds:
       - npm run build:fetch
 
+  check:
+    desc: Build the site and verify generated internal links
+    cmds:
+      - npm run check
+
   preview:
     desc: Preview the built site at http://localhost:8080
     deps: [build]

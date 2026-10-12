@@ -1,0 +1,16 @@
+== Reboot and verify
+
+Keep the distribution's existing kernel available in the bootloader.
+After installing the packages and completing the distribution-specific bootloader configuration, reboot and record:
+
+[source,console]
+----
+uname -r
+yogabook-validator check
+----
+
+The running kernel should identify the Yoga Book build.
+Review every `WARN`, `FAIL`, and `SKIP`; an installed package or successful service start is not physical acceptance.
+
+Continue with xref:validation.adoc[Validate the installed system] before treating the installation as a known-good baseline.
+

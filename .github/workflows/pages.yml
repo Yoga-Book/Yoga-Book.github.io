@@ -37,8 +37,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build the Antora site
-        run: npm run build
+      - name: Build and check the Antora site
+        run: npm run check
 
       - name: Upload the Pages artifact
         uses: actions/upload-pages-artifact@v4

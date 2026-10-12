@@ -11,7 +11,7 @@
 Community-led Linux enablement for the original Intel-based Lenovo Yoga Book:
 kernel, input, audio, sensors, cameras, location, installation, and validation.
 
-xref:get-started.adoc[Get started,role="button primary"]
+xref:install-ubuntu.adoc[Install Ubuntu 26.04,role="button primary"]
 xref:projects.adoc[Explore projects,role="button"]
 ====
 
@@ -26,22 +26,22 @@ IMPORTANT: This is active, device-specific development. A successful build or au
 --
 [.card-label]#01 · INSTALL#
 
-[.card-title]#Prepare an Ubuntu image#
+[.card-title]#Install Ubuntu 26.04#
 
-Use the documented ISO-remastering workflow as the system-integration entry point.
+Follow the safety, build, installation, first-boot, and recovery path for YB1-X91L.
 
-https://github.com/Yoga-Book/Ubuntu-Autoinstall[Ubuntu Autoinstall →]
+xref:install-ubuntu.adoc[Open the installation guide →]
 --
 
 [.card]
 --
-[.card-label]#02 · DEVELOP#
+[.card-label]#02 · ARCHITECTURE#
 
-[.card-title]#Follow platform work#
+[.card-title]#Understand the system#
 
-Explore the kernel branches and patches that provide the hardware-enablement foundation.
+See how kernel, device services, desktop integration, packaging, and validation fit together.
 
-https://github.com/Yoga-Book/Yoga-Book-Linux-Kernel[Linux kernel →]
+xref:architecture.adoc[Read the architecture guide →]
 --
 
 [.card]
@@ -52,7 +52,7 @@ https://github.com/Yoga-Book/Yoga-Book-Linux-Kernel[Linux kernel →]
 
 Audit an installation and record automated results separately from physical checks.
 
-https://github.com/Yoga-Book/Yoga-Book-Validator[Yoga Book Validator →]
+xref:validation.adoc[Open the validation guide →]
 --
 ====
 
@@ -74,7 +74,7 @@ https://github.com/Yoga-Book/Yoga-Book-Validator[Yoga Book Validator →]
 The Lenovo Yoga Book **YB1-X91L** is the primary integration and acceptance target.
 Individual projects document any additional supported models and the evidence available for them.
 
-xref:support-status.adoc[Understand support claims and evidence →]
+xref:hardware-support.adoc[Review hardware support boundaries →]
 
 == Distribution packages
 
