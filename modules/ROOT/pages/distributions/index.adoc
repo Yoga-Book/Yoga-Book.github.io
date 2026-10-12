@@ -16,7 +16,7 @@ Community-maintained package repositories make the Yoga Book kernel and userspac
 |xref:distributions/debian.adoc[Install on Debian]
 
 |Ubuntu
-|Repositories published for named Ubuntu releases
+|Repositories for Ubuntu 26.04 LTS, 24.04 LTS, and the archived 25.10 release
 |xref:distributions/ubuntu.adoc[Install on Ubuntu]
 
 |Alpine Linux

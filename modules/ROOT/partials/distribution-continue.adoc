@@ -1,0 +1,3 @@
+== Continue setup
+
+The source guide directs existing installations to continue with the https://github.com/Yoga-Book/#get-started[Yoga Book quickstart,window=_blank]. It also states that users following https://github.com/jekhor/yogabook-linux?tab=readme-ov-file#quick-start[Yauhen Kharuzhy's original quick start,window=_blank] can resume at step 10 after installing the packages.

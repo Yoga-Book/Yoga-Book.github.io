@@ -3,7 +3,9 @@
 
 This guide configures Imanuel Ulbricht's Arch package repository, installs the Yoga Book package set, and shows a `systemd-boot` entry for the Yoga Book kernel.
 
-Source guide:: https://arch.yogabook.ulbricht.casa/[arch.yogabook.ulbricht.casa]
+.Source guide
+https://arch.yogabook.ulbricht.casa/[arch.yogabook.ulbricht.casa,window=_blank]
+
 Last reviewed:: 2026-10-12
 
 include::partial$distribution-trust.adoc[]
@@ -61,7 +63,11 @@ To select the new entry by default, set this line in `/boot/loader/loader.conf`:
 
 [source,text]
 ----
+#timeout 3
+#console-mode keep
 default yogabook.conf
+editor no
+# Add more custom options here
 ----
 
 The source guide documents only `systemd-boot`. Adapt the kernel, initramfs, and microcode paths according to the documentation for any other bootloader.
@@ -69,4 +75,6 @@ The source guide documents only `systemd-boot`. Adapt the kernel, initramfs, and
 == Build sources
 
 The Arch package build scripts and pipelines are maintained in the https://gitlab.imanuel.dev/packages/yogabook/building/pacman-build[pacman-build project].
+
+include::partial$distribution-credits.adoc[]
 

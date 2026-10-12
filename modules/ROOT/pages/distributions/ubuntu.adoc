@@ -3,22 +3,37 @@
 
 This guide configures Imanuel Ulbricht's Ubuntu package repository and installs the Yoga Book package set.
 
-Source guide:: https://ubuntu.yogabook.ulbricht.casa/[ubuntu.yogabook.ulbricht.casa]
+.Source guide
+https://ubuntu.yogabook.ulbricht.casa/[ubuntu.yogabook.ulbricht.casa,window=_blank]
+
 Last reviewed:: 2026-10-12
 
 include::partial$distribution-trust.adoc[]
+
+== Ubuntu 26.04 LTS (Resolute Raccoon)
+
+[source,console]
+----
+sudo install -d -m 0755 /etc/apt/keyrings
+sudo curl --fail --show-error --location \
+  https://packages.ulbricht.casa/api/packages/linux-yogabook/debian/repository.key \
+  --output /etc/apt/keyrings/forgejo-linux-yogabook.asc
+echo 'deb [signed-by=/etc/apt/keyrings/forgejo-linux-yogabook.asc] https://packages.ulbricht.casa/api/packages/linux-yogabook/debian resolute main' \
+  | sudo tee /etc/apt/sources.list.d/forgejo-linux-yogabook.list
+sudo apt update
+----
 
 == Ubuntu 24.04 LTS (Noble Numbat)
 
 [source,console]
 ----
 sudo install -d -m 0755 /etc/apt/keyrings
-sudo curl --fail --silent --show-error \
-  --output /etc/apt/keyrings/yogabook-archive-keyring.asc \
-  --url https://gitlab.imanuel.dev/api/v4/projects/387/debian_distributions/noble/key.asc
-echo 'deb [signed-by=/etc/apt/keyrings/yogabook-archive-keyring.asc] https://gitlab.imanuel.dev/api/v4/projects/387/packages/debian noble main' \
-  | sudo tee /etc/apt/sources.list.d/yogabook-project.list
-sudo apt-get update
+sudo curl --fail --show-error --location \
+  https://packages.ulbricht.casa/api/packages/linux-yogabook/debian/repository.key \
+  --output /etc/apt/keyrings/forgejo-linux-yogabook.asc
+echo 'deb [signed-by=/etc/apt/keyrings/forgejo-linux-yogabook.asc] https://packages.ulbricht.casa/api/packages/linux-yogabook/debian noble main' \
+  | sudo tee /etc/apt/sources.list.d/forgejo-linux-yogabook.list
+sudo apt update
 ----
 
 == Ubuntu 25.10 (Questing Quokka)
@@ -28,26 +43,32 @@ WARNING: Ubuntu 25.10 reached end of life on **2026-07-09** and no longer receiv
 [source,console]
 ----
 sudo install -d -m 0755 /etc/apt/keyrings
-sudo curl --fail --silent --show-error \
-  --output /etc/apt/keyrings/yogabook-archive-keyring.asc \
-  --url https://gitlab.imanuel.dev/api/v4/projects/388/debian_distributions/questing/key.asc
-echo 'deb [signed-by=/etc/apt/keyrings/yogabook-archive-keyring.asc] https://gitlab.imanuel.dev/api/v4/projects/388/packages/debian questing main' \
-  | sudo tee /etc/apt/sources.list.d/yogabook-project.list
-sudo apt-get update
+sudo curl --fail --show-error --location \
+  https://packages.ulbricht.casa/api/packages/linux-yogabook/debian/repository.key \
+  --output /etc/apt/keyrings/forgejo-linux-yogabook.asc
+echo 'deb [signed-by=/etc/apt/keyrings/forgejo-linux-yogabook.asc] https://packages.ulbricht.casa/api/packages/linux-yogabook/debian questing main' \
+  | sudo tee /etc/apt/sources.list.d/forgejo-linux-yogabook.list
+sudo apt update
 ----
 
 == Install the package set
 
 [source,console]
 ----
-sudo apt install linux-image-yogabook linux-headers-yogabook yogabook-support touch-keyboard alsa-ucm-conf-yogabook
+sudo apt install linux-image-yogabook linux-headers-yogabook halo-keyboard alsa-ucm-conf-yogabook yogabook-sensors yogabook-gnss yogabook-camera yogabook-validator
 ----
+
+This installs the patched kernel and headers, Halo keyboard driver, ALSA UCM configuration, sensor policy, GNSS and camera support, and Yoga Book Validator.
 
 Keep the generic Ubuntu kernel installed as a fallback until the Yoga Book kernel and device-specific packages have passed the required physical checks.
 
 For a complete Yoga Book system image rather than packages on an existing installation, use the xref:get-started.adoc[Ubuntu Autoinstall workflow].
 
+include::partial$distribution-continue.adoc[]
+
 == Build sources
 
-The linked source page provides its package build sources and pipeline through the https://gitlab.imanuel.dev/packages/yogabook[Yoga Book packaging projects].
+The Ubuntu package build scripts and pipelines are maintained in the https://gitlab.imanuel.dev/packages/yogabook/building/apt-build[apt-build project].
+
+include::partial$distribution-credits.adoc[]
 

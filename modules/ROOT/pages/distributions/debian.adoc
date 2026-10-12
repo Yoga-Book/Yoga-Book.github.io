@@ -3,7 +3,9 @@
 
 This guide configures Imanuel Ulbricht's Debian package repository and installs the Yoga Book package set.
 
-Source guide:: https://debian.yogabook.ulbricht.casa/[debian.yogabook.ulbricht.casa]
+.Source guide
+https://debian.yogabook.ulbricht.casa/[debian.yogabook.ulbricht.casa,window=_blank]
+
 Last reviewed:: 2026-10-12
 
 include::partial$distribution-trust.adoc[]
@@ -25,16 +27,56 @@ The suite must match the installed system. Do not mix Debian releases merely to 
 
 == Add the repository
 
-The following example uses Trixie. Replace `trixie` in both the shell variable and repository line with the matching value from the table.
+Use the section matching the installed Debian suite. Each command writes a dedicated source-list file so rerunning it does not duplicate the repository entry.
+
+=== Sid
 
 [source,console]
 ----
-suite=trixie
 sudo install -d -m 0755 /etc/apt/keyrings
 sudo curl --fail --show-error --location \
   https://packages.ulbricht.casa/api/packages/linux-yogabook/debian/repository.key \
   --output /etc/apt/keyrings/forgejo-linux-yogabook.asc
-echo "deb [signed-by=/etc/apt/keyrings/forgejo-linux-yogabook.asc] https://packages.ulbricht.casa/api/packages/linux-yogabook/debian ${suite} main" \
+echo 'deb [signed-by=/etc/apt/keyrings/forgejo-linux-yogabook.asc] https://packages.ulbricht.casa/api/packages/linux-yogabook/debian sid main' \
+  | sudo tee /etc/apt/sources.list.d/forgejo-linux-yogabook.list
+sudo apt update
+----
+
+=== Testing
+
+[source,console]
+----
+sudo install -d -m 0755 /etc/apt/keyrings
+sudo curl --fail --show-error --location \
+  https://packages.ulbricht.casa/api/packages/linux-yogabook/debian/repository.key \
+  --output /etc/apt/keyrings/forgejo-linux-yogabook.asc
+echo 'deb [signed-by=/etc/apt/keyrings/forgejo-linux-yogabook.asc] https://packages.ulbricht.casa/api/packages/linux-yogabook/debian testing main' \
+  | sudo tee /etc/apt/sources.list.d/forgejo-linux-yogabook.list
+sudo apt update
+----
+
+=== Forky
+
+[source,console]
+----
+sudo install -d -m 0755 /etc/apt/keyrings
+sudo curl --fail --show-error --location \
+  https://packages.ulbricht.casa/api/packages/linux-yogabook/debian/repository.key \
+  --output /etc/apt/keyrings/forgejo-linux-yogabook.asc
+echo 'deb [signed-by=/etc/apt/keyrings/forgejo-linux-yogabook.asc] https://packages.ulbricht.casa/api/packages/linux-yogabook/debian forky main' \
+  | sudo tee /etc/apt/sources.list.d/forgejo-linux-yogabook.list
+sudo apt update
+----
+
+=== Trixie
+
+[source,console]
+----
+sudo install -d -m 0755 /etc/apt/keyrings
+sudo curl --fail --show-error --location \
+  https://packages.ulbricht.casa/api/packages/linux-yogabook/debian/repository.key \
+  --output /etc/apt/keyrings/forgejo-linux-yogabook.asc
+echo 'deb [signed-by=/etc/apt/keyrings/forgejo-linux-yogabook.asc] https://packages.ulbricht.casa/api/packages/linux-yogabook/debian trixie main' \
   | sudo tee /etc/apt/sources.list.d/forgejo-linux-yogabook.list
 sudo apt update
 ----
@@ -48,9 +90,15 @@ Inspect the downloaded key and the packages APT proposes before accepting instal
 sudo apt install linux-image-yogabook linux-headers-yogabook halo-keyboard alsa-ucm-conf-yogabook yogabook-sensors yogabook-gnss yogabook-camera yogabook-validator
 ----
 
+This installs the patched kernel and headers, Halo keyboard driver, ALSA UCM configuration, sensor policy, GNSS and camera support, and Yoga Book Validator.
+
 Keep the distribution kernel installed as a recovery option until the Yoga Book kernel has passed the required physical checks.
+
+include::partial$distribution-continue.adoc[]
 
 == Build sources
 
 The Debian package build scripts and pipelines are maintained in the https://gitlab.imanuel.dev/packages/yogabook/building/apt-build[apt-build project].
+
+include::partial$distribution-credits.adoc[]
 

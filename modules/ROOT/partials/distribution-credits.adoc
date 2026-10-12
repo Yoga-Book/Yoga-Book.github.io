@@ -1,0 +1,3 @@
+== Credits
+
+https://github.com/jekhor[Yauhen Kharuzhy] created the original Yoga Book packages. Since September 2026, https://github.com/MaurizioCasciano[Maurizio Casciano] and https://github.com/DerKnerd[Imanuel Ulbricht] have collaborated on updating the packages for current distributions.

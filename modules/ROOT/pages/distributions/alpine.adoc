@@ -3,7 +3,9 @@
 
 This guide configures Imanuel Ulbricht's Alpine package repository and installs the Yoga Book package set with OpenRC services.
 
-Source guide:: https://alpine.yogabook.ulbricht.casa/[alpine.yogabook.ulbricht.casa]
+.Source guide
+https://alpine.yogabook.ulbricht.casa/[alpine.yogabook.ulbricht.casa,window=_blank]
+
 Last reviewed:: 2026-10-12
 
 include::partial$distribution-trust.adoc[]
@@ -31,9 +33,15 @@ Review the downloaded key and the repository contents before installing packages
 apk add linux-yogabook linux-yogabook-dev yogabook-keyboard alsa-ucm-conf-yogabook yogabook-sensors yogabook-gnss yogabook-camera yogabook-validator yogabook-keyboard-openrc yogabook-gnss-openrc yogabook-camera-openrc
 ----
 
+This installs the patched kernel and development files, Halo keyboard support, ALSA UCM configuration, sensor policy, GNSS and camera support, Yoga Book Validator, and the matching OpenRC services.
+
 Keep a known-good boot path until the new kernel and OpenRC services have passed the required physical checks.
+
+include::partial$distribution-continue.adoc[]
 
 == Build sources
 
 The Alpine source page currently links to the shared https://gitlab.imanuel.dev/packages/yogabook/building/apt-build[packaging build project].
+
+include::partial$distribution-credits.adoc[]
 
