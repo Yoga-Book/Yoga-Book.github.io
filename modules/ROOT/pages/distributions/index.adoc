@@ -1,7 +1,7 @@
 = Distributions
-:description: Community package repositories for running Linux on the original Lenovo Yoga Book.
+:description: Official package repositories for running Linux on the original Lenovo Yoga Book.
 
-Community-maintained package repositories make the Yoga Book kernel and userspace components available for several distributions.
+Official package repositories make the Yoga Book kernel and userspace components available for several distributions.
 
 [cols="1,2,2",options="header"]
 |===
